@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ToastShelf from '../ToastShelf/ToastShelf';
 
 export const ToastContext = React.createContext();
@@ -23,6 +23,18 @@ function ToastProvider({ children }) {
     const newMessages = messages.filter((m) => m.id !== message.id);
     setMessages(newMessages);
   }
+
+  useEffect(() => {
+    function escapeListener(e) {
+      if (e.key === 'Escape') {
+        setMessages([])
+      }
+    }
+    window.addEventListener('keydown', escapeListener)
+    return () => {
+      window.removeEventListener('keydown', escapeListener)
+    }
+  }, [])
 
   return (
     <ToastContext.Provider value={{ notify: addMessage }}>
