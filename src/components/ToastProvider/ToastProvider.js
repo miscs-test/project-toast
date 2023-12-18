@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ToastShelf from '../ToastShelf/ToastShelf';
+import { useEscKey } from '../../hooks/use-esc-key';
 
 export const ToastContext = React.createContext();
 
@@ -24,17 +25,18 @@ function ToastProvider({ children }) {
     setMessages(newMessages);
   }
 
-  useEffect(() => {
-    function escapeListener(e) {
-      if (e.key === 'Escape') {
-        setMessages([])
-      }
-    }
-    window.addEventListener('keydown', escapeListener)
-    return () => {
-      window.removeEventListener('keydown', escapeListener)
-    }
-  }, [])
+  // useEffect(() => {
+  //   function escapeListener(e) {
+  //     if (e.key === 'Escape') {
+  //       setMessages([])
+  //     }
+  //   }
+  //   window.addEventListener('keydown', escapeListener)
+  //   return () => {
+  //     window.removeEventListener('keydown', escapeListener)
+  //   }
+  // }, [])
+  useEscKey(() => { setMessages([]) })
 
   return (
     <ToastContext.Provider value={{ notify: addMessage }}>
